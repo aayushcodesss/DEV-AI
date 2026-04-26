@@ -11,22 +11,27 @@ const PORT = process.env.PORT || 8080;
 app.use(express.json());
 app.use(cors());
 
+// 🔥 Test route (IMPORTANT)
+app.get("/", (req, res) => {
+  res.send("Backend running 🚀");
+});
+
 // Routes
 app.use("/api", chatRoutes);
 
-// ✅ DB + Server start together (best practice)
-const startServer = async () => {
+// 🔥 Start server ALWAYS
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT} 🚀`);
+});
+
+// 🔥 Connect DB separately (server block nahi hoga)
+const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log("Connected with Database! ✅");
-
-    app.listen(PORT, () => {
-      console.log(`Server running on ${PORT} 🚀`);
-    });
-
   } catch (err) {
     console.log("Failed to connect with DB ❌", err);
   }
 };
 
-startServer();
+connectDB();
